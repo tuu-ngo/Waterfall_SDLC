@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Waterfall Model — Presentation Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFFFFF;
+  --cream:#FFF7F1;
+  --ink:#1F2933;
+  --amber:#E8590C;
+  --amber-lt:#FDBA74;
+  --amber-soft:#FFEEE0;
+  --rust:#9A3412;
+  --stone:#6B7280;
+  --rule:rgba(31,41,51,.12);
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono','SF Mono',Menlo,monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:#EDE8E3;
+  font-family:var(--sans);
+  color:var(--ink);
+  overflow:hidden;
+}
+
+/* ---------- scaling frame: fixed 1600x900 canvas, scaled to the window ---------- */
+#frame{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+}
+#stage{
+  position:relative;flex:none;
+  width:1600px;height:900px;
+  transform-origin:center center;
+  background:var(--paper);
+  overflow:hidden;
+  box-shadow:0 24px 70px rgba(31,41,51,.22);
+}
+
+.slide{
+  position:absolute;inset:0;
+  padding:66px 104px 92px;
+  display:none;
+  flex-direction:column;
+  background:var(--paper);
+}
+.slide.on{display:flex;animation:rise .42s cubic-bezier(.2,.7,.3,1)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}}
+
+.slide.accent{background:var(--cream)}
+
+/* signature: cascade rail down the left edge */
+.rail{
+  position:absolute;left:0;top:0;bottom:0;width:12px;
+  display:flex;flex-direction:column;
+  background:rgba(31,41,51,.05);
+}
+.rail i{flex:1;background:transparent;transition:background .3s}
+.rail i.fill{background:var(--amber)}
+
+/* ---------- type ---------- */
+.eyebrow{
+  font-family:var(--mono);
+  font-size:13px;letter-spacing:.16em;font-weight:500;
+  color:var(--amber);
+  margin-bottom:20px;
+  display:flex;align-items:center;gap:14px;
+}
+.eyebrow::after{content:'';height:1px;flex:1;background:var(--rule);max-width:160px}
+
+h1{font-size:82px;font-weight:800;letter-spacing:-.035em;line-height:1.02}
+h2{font-size:44px;font-weight:700;letter-spacing:-.028em;line-height:1.1;margin-bottom:26px}
+h3{font-size:20px;font-weight:700;letter-spacing:-.012em;margin-bottom:10px}
+.lede{font-size:20px;color:var(--stone);line-height:1.55;max-width:52ch}
+.lede strong{color:var(--ink)}
+ul{list-style:none}
+li{
+  font-size:19px;line-height:1.5;
+  padding-left:26px;position:relative;
+  margin-bottom:15px;max-width:46ch;
+}
+li::before{
+  content:'';position:absolute;left:0;top:.62em;
+  width:11px;height:2px;background:var(--amber);
+}
+li.warn::before{background:var(--rust)}
+
+.body{flex:1;display:flex;gap:56px;min-height:0}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.col.tight{justify-content:flex-start}
+
+/* three-up trait columns */
+.trait{justify-content:center;padding-right:52px}
+.trait + .trait{border-left:1px solid var(--rule);padding-left:52px}
+.tnum{font-family:var(--mono);font-size:13px;letter-spacing:.16em;color:var(--amber);margin-bottom:20px}
+.tfoot{
+  font-family:var(--mono);font-size:12px;letter-spacing:.12em;
+  color:var(--stone);margin-top:22px;padding-top:16px;
+  border-top:1px solid var(--rule);
+}
+
+/* ---------- footer ---------- */
+.foot{
+  position:absolute;left:104px;right:104px;bottom:38px;
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:var(--mono);font-size:13px;letter-spacing:.1em;
+  color:var(--stone);
+}
+.foot span:last-child{color:var(--amber)}
+
+/* ---------- cover ---------- */
+.cover{justify-content:center}
+.cover-text{max-width:780px}
+.cover .kicker{
+  font-family:var(--mono);font-size:13px;letter-spacing:.18em;
+  color:var(--stone);margin-bottom:26px;
+}
+.cover h1{max-width:14ch}
+.cover h1 span{color:var(--amber)}
+.cover .sub{
+  font-family:var(--mono);font-size:15px;letter-spacing:.16em;font-weight:500;
+  color:var(--rust);margin-top:26px;
+}
+.cover .rulebar{width:120px;height:5px;background:var(--amber);margin:34px 0 26px}
+.cover .meta{font-size:17px;color:var(--stone);line-height:1.8}
+.cover-art{position:absolute;right:76px;top:50%;transform:translateY(-50%);width:520px}
+.cover-blob{
+  position:absolute;right:20px;top:50%;transform:translateY(-50%);
+  width:620px;height:620px;
+  border-radius:50%;background:var(--amber-soft);
+}
+.cover .hint{
+  font-family:var(--mono);font-size:12px;letter-spacing:.12em;
+  color:var(--stone);margin-top:40px;opacity:.75;
+}
+
+/* ---------- hook ---------- */
+.hook{justify-content:center}
+.hook p{font-size:58px;font-weight:700;letter-spacing:-.03em;line-height:1.16;max-width:20ch}
+.hook em{font-style:normal;color:var(--amber)}
+.hook .attrib{
+  font-family:var(--mono);font-size:15px;letter-spacing:.14em;
+  color:var(--stone);margin-top:42px;
+}
+.hook .quotemark{
+  position:absolute;left:78px;top:120px;font-size:220px;line-height:1;
+  color:var(--amber-soft);font-weight:800;z-index:0;
+}
+.hook p,.hook .attrib{position:relative;z-index:1}
+.hook p{max-width:18ch}
+.hook-art{
+  position:absolute;right:120px;top:50%;transform:translateY(-50%);
+  width:400px;filter:drop-shadow(0 14px 34px rgba(154,52,18,.14));
+}
+
+/* ---------- big figure ---------- */
+.figure{font-size:124px;font-weight:800;letter-spacing:-.05em;color:var(--amber);line-height:.9}
+.figure-note{font-size:19px;color:var(--stone);margin-top:16px;max-width:26ch;line-height:1.5}
+
+/* ---------- cards ---------- */
+.cards{display:flex;gap:32px;width:100%}
+.card{
+  flex:1;border:1px solid var(--rule);border-radius:4px;
+  padding:26px 26px 22px;
+  display:flex;flex-direction:column;position:relative;background:#fff;
+  box-shadow:0 2px 10px rgba(31,41,51,.04);
+}
+.card::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:4px;background:var(--amber);border-radius:4px 4px 0 0}
+.card.alt::before{background:var(--rust)}
+.card .pct{
+  font-family:var(--mono);font-size:28px;font-weight:700;
+  color:var(--amber);margin-top:auto;padding-top:18px;letter-spacing:-.02em;
+}
+.card.alt .pct{color:var(--rust)}
+.card ul{margin-top:6px}
+.card li{font-size:16px;margin-bottom:9px;padding-left:20px;max-width:none}
+.card li::before{top:.55em;width:8px}
+
+/* ---------- split ---------- */
+.split{display:flex;gap:0;width:100%;flex:1}
+.split > div{flex:1;padding:0 44px}
+.split > div:first-child{padding-left:0;border-right:1px solid var(--rule)}
+.split > div:last-child{padding-right:0}
+.badge{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:19px;font-weight:700;margin-bottom:18px;color:#fff;
+}
+.badge.yes{background:var(--amber)}
+.badge.no{background:var(--rust)}
+
+/* ---------- table ---------- */
+table{width:100%;border-collapse:collapse;font-size:18px}
+thead th{
+  background:var(--rust);color:#fff;
+  font-family:var(--mono);font-size:13px;letter-spacing:.1em;
+  text-align:left;padding:13px 16px;font-weight:500;
+}
+tbody td{padding:12px 16px;border-bottom:1px solid var(--rule);vertical-align:top}
+tbody tr:nth-child(even){background:var(--cream)}
+tbody tr:last-child td{border-bottom:none}
+tbody td:first-child{color:var(--stone);font-family:var(--mono);font-size:14px;letter-spacing:.06em}
+.tnote{font-size:16px;color:var(--stone);margin-top:18px;font-style:italic}
+
+/* ---------- svg ---------- */
+svg{width:100%;height:auto;display:block;overflow:visible}
+.s-amber{fill:var(--amber)}
+.s-rust{fill:var(--rust)}
+.s-ink{fill:var(--ink)}
+.s-soft{fill:var(--amber-soft)}
+.s-stroke{fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.s-stroke-amber{fill:none;stroke:var(--amber);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.s-stroke-rust{fill:none;stroke:var(--rust);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.s-dash{fill:none;stroke:var(--stone);stroke-width:1;stroke-dasharray:3 4}
+.s-label{font-family:var(--mono);font-size:10px;fill:var(--ink)}
+.s-label-sm{font-family:var(--mono);font-size:8.5px;fill:var(--stone)}
+.s-label-w{font-family:var(--mono);font-size:9.5px;fill:#fff;letter-spacing:.03em}
+
+/* ---------- controls ---------- */
+#ui{
+  position:fixed;bottom:14px;right:16px;z-index:40;
+  display:flex;gap:6px;align-items:center;
+  font-family:var(--mono);font-size:12px;
+}
+#ui button{
+  font:inherit;background:#fff;color:var(--ink);
+  border:1px solid rgba(31,41,51,.18);border-radius:4px;
+  padding:6px 11px;cursor:pointer;box-shadow:0 1px 4px rgba(31,41,51,.1);
+}
+#ui button:hover{background:var(--amber);color:#fff;border-color:var(--amber)}
+#ui button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+#count{color:var(--stone);padding:0 6px}
+
+#notes{
+  position:fixed;left:0;right:0;bottom:0;z-index:35;
+  background:#fff;color:var(--ink);
+  border-top:3px solid var(--amber);
+  padding:18px 26px 22px;font-size:15px;line-height:1.6;
+  max-height:32vh;overflow:auto;display:none;
+  box-shadow:0 -8px 26px rgba(31,41,51,.12);
+}
+#notes.show{display:block}
+#notes b{color:var(--amber);font-family:var(--mono);font-size:12px;letter-spacing:.1em;display:block;margin-bottom:7px;font-weight:500}
+
+@media print{
+  @page{size:1600px 900px;margin:0}
+  body{background:#fff;overflow:visible}
+  #ui,#notes{display:none!important}
+  #frame{position:static;display:block}
+  #stage{transform:none!important;box-shadow:none;width:1600px;height:auto}
+  .slide{display:flex!important;position:relative;width:1600px;height:900px;page-break-after:always;animation:none}
+}
+</style>
+</head>
+<body>
+
+<div id="frame">
+<div id="stage">
+
+<!-- 1 -->
+<section class="slide cover on">
+  <div class="rail"></div>
+  <div class="cover-blob"></div>
+  <div class="cover-art">
+    <svg viewBox="0 0 400 290">
+      <defs>
+        <linearGradient id="cg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#FDBA74"/>
+          <stop offset="55%" stop-color="#E8590C"/>
+          <stop offset="100%" stop-color="#9A3412"/>
+        </linearGradient>
+        <filter id="csh" x="-30%" y="-30%" width="180%" height="180%">
+          <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#9A3412" flood-opacity=".22"/>
+        </filter>
+      </defs>
+
+      <!-- descent guide -->
+      <path d="M150 44 L370 254" class="s-dash" stroke-width="1.2"/>
+
+      <g filter="url(#csh)">
+        <rect x="8"   y="14"  width="150" height="32" rx="4" fill="url(#cg)"/>
+        <rect x="52"  y="60"  width="150" height="32" rx="4" fill="url(#cg)"/>
+        <rect x="96"  y="106" width="150" height="32" rx="4" fill="url(#cg)"/>
+        <rect x="140" y="152" width="150" height="32" rx="4" fill="url(#cg)"/>
+        <rect x="184" y="198" width="150" height="32" rx="4" fill="url(#cg)"/>
+        <rect x="228" y="244" width="150" height="32" rx="4" fill="url(#cg)"/>
+      </g>
+
+      <g fill="#fff" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700" opacity=".9">
+        <text x="22"  y="34">01</text>
+        <text x="66"  y="80">02</text>
+        <text x="110" y="126">03</text>
+        <text x="154" y="172">04</text>
+        <text x="198" y="218">05</text>
+        <text x="242" y="264">06</text>
+      </g>
+
+      <!-- water drops between plates -->
+      <g class="s-stroke-amber" stroke-width="2">
+        <path d="M128 46v12l4-4M128 58l-4-4"/>
+        <path d="M172 92v12l4-4M172 104l-4-4"/>
+        <path d="M216 138v12l4-4M216 150l-4-4"/>
+        <path d="M260 184v12l4-4M260 196l-4-4"/>
+        <path d="M304 230v12l4-4M304 242l-4-4"/>
+      </g>
+    </svg>
+  </div>
+  <div class="cover-text">
+    <div class="kicker">SOFTWARE ENGINEERING · PRESENTATION DECK</div>
+    <h1>The <span>Waterfall</span> Model</h1>
+    <div class="sub">SEQUENTIAL SOFTWARE DEVELOPMENT</div>
+    <div class="rulebar"></div>
+    <div class="meta">Presenter name · Course · Date<br>16 slides · speaker notes included</div>
+    <div class="hint">→ / SPACE ADVANCE · N NOTES · F FULLSCREEN</div>
+  </div>
+  <div class="foot"><span>WATERFALL</span><span>01 / 16</span></div>
+</section>
+
+<!-- 2 -->
+<section class="slide accent hook">
+  <div class="rail"></div>
+  <div class="quotemark">&ldquo;</div>
+  <div class="hook-art">
+    <svg viewBox="0 0 320 380">
+      <!-- the 1970 paper -->
+      <g>
+        <rect x="14" y="14" width="286" height="352" rx="3" fill="#fff" stroke="rgba(31,41,51,.16)"/>
+        <rect x="14" y="14" width="286" height="10" rx="3" fill="#E8590C"/>
+        <text x="38" y="60" class="s-label" font-size="11" font-weight="700">MANAGING THE DEVELOPMENT</text>
+        <text x="38" y="76" class="s-label" font-size="11" font-weight="700">OF LARGE SOFTWARE SYSTEMS</text>
+        <text x="38" y="96" class="s-label-sm">DR. WINSTON W. ROYCE · 1970</text>
+        <path d="M38 108h224" stroke="rgba(31,41,51,.14)"/>
+      </g>
+      <!-- the sequential diagram he drew -->
+      <g>
+        <rect x="38"  y="126" width="86" height="20" rx="2" fill="#F59E5B"/>
+        <rect x="66"  y="154" width="86" height="20" rx="2" fill="#EF7C2B"/>
+        <rect x="94"  y="182" width="86" height="20" rx="2" fill="#E8590C"/>
+        <rect x="122" y="210" width="86" height="20" rx="2" fill="#B03F08"/>
+        <rect x="150" y="238" width="86" height="20" rx="2" fill="#9A3412"/>
+        <g class="s-stroke" stroke-width="1.1" opacity=".55">
+          <path d="M110 146v8M138 174v8M166 202v8M194 230v8"/>
+        </g>
+      </g>
+      <!-- his own warning, circled -->
+      <g>
+        <path d="M38 292h224M38 310h190M38 328h214" stroke="rgba(31,41,51,.13)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M38 310h190" stroke="#9A3412" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+        <text x="38" y="352" class="s-label-sm" style="fill:var(--rust)">&ldquo;the implementation described is risky</text>
+        <text x="38" y="363" class="s-label-sm" style="fill:var(--rust)">and invites failure&rdquo;</text>
+      </g>
+      <!-- the drawn model on the page, the warning underneath -->
+      <g>
+        <path d="M244 264c24 0 24 24 0 24" class="s-stroke-rust" stroke-width="1.5"/>
+        <path d="M248 284l-5 4 5 4" class="s-stroke-rust" stroke-width="1.5"/>
+        <text x="192" y="278" class="s-label-sm" style="fill:var(--rust)">…and then</text>
+      </g>
+    </svg>
+  </div>
+  <p>The engineer who drew this model published the paper to argue <em>against</em> it.</p>
+  <div class="attrib">WINSTON W. ROYCE · IEEE WESCON · 1970</div>
+  <div class="foot"><span>THE PREMISE</span><span>02 / 16</span></div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <div class="rail"></div>
+  <div class="eyebrow">§1 &nbsp;DEFINITION</div>
+  <h2>Phases run once, in order, with no overlap</h2>
+  <div class="body">
+    <div class="col">
+      <p class="lede">Each phase must be fully complete and formally approved before the next begins. The output of one phase is the sole input to the next.</p>
+      <ul style="margin-top:26px">
+        <li>Progress flows one direction only</li>
+        <li>Documents carry knowledge between phases</li>
+        <li>A signature gates every transition</li>
+      </ul>
+    </div>
+    <div class="col" style="flex:1.05;justify-content:center">
+      <svg viewBox="0 0 380 224">
+        <g>
+          <rect x="0"   y="2"   width="132" height="30" rx="3" fill="#F59E5B"/>
+          <text x="12" y="21" class="s-label-w">1 · REQUIREMENTS</text>
+          <rect x="36"  y="38"  width="132" height="30" rx="3" fill="#EF7C2B"/>
+          <text x="48" y="57" class="s-label-w">2 · DESIGN</text>
+          <rect x="72"  y="74"  width="132" height="30" rx="3" fill="#E8590C"/>
+          <text x="84" y="93" class="s-label-w">3 · IMPLEMENTATION</text>
+          <rect x="108" y="110" width="132" height="30" rx="3" fill="#D24C09"/>
+          <text x="120" y="129" class="s-label-w">4 · TESTING</text>
+          <rect x="144" y="146" width="132" height="30" rx="3" fill="#B03F08"/>
+          <text x="156" y="165" class="s-label-w">5 · DEPLOYMENT</text>
+          <rect x="180" y="182" width="132" height="30" rx="3" fill="#9A3412"/>
+          <text x="192" y="201" class="s-label-w">6 · MAINTENANCE</text>
+        </g>
+        <g class="s-stroke" stroke-width="1.2">
+          <path d="M132 17h14a7 7 0 0 1 7 7v8"/>
+          <path d="M168 53h14a7 7 0 0 1 7 7v8"/>
+          <path d="M204 89h14a7 7 0 0 1 7 7v8"/>
+          <path d="M240 125h14a7 7 0 0 1 7 7v8"/>
+          <path d="M276 161h14a7 7 0 0 1 7 7v8"/>
+        </g>
+        <g class="s-label-sm">
+          <text x="152" y="14">SRS</text>
+          <text x="188" y="50">SDD</text>
+          <text x="224" y="86">CODE</text>
+          <text x="260" y="122">TEST REPORT</text>
+          <text x="296" y="158">RELEASE</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="foot"><span>DEFINITION</span><span>03 / 16</span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <div class="rail"></div>
+  <div class="eyebrow">§2 &nbsp;CORE TRAITS</div>
+  <h2>Three things hold the model together</h2>
+  <div class="body" style="align-items:stretch;gap:0">
+    <div class="col trait">
+      <div class="tnum">01</div>
+      <svg viewBox="0 0 72 72" style="width:118px;margin-bottom:26px">
+        <circle cx="36" cy="36" r="34" class="s-soft"/>
+        <g class="s-stroke-amber" stroke-width="2.4">
+          <path d="M15 36h37M43 27l9 9-9 9"/>
+          <path d="M23 29v14M31 29v14" stroke-width="1.6" opacity=".5"/>
+        </g>
+      </svg>
+      <h3>Strict sequencing</h3>
+      <p class="lede" style="font-size:17px">No coding before design. No design before requirements are locked.</p>
+      <div class="tfoot">ONE DIRECTION · NO OVERLAP</div>
+    </div>
+    <div class="col trait">
+      <div class="tnum">02</div>
+      <svg viewBox="0 0 72 72" style="width:118px;margin-bottom:26px">
+        <circle cx="36" cy="36" r="34" class="s-soft"/>
+        <g class="s-stroke-amber" stroke-width="2.2">
+          <rect x="17" y="15" width="28" height="35" rx="2" fill="#fff"/>
+          <rect x="27" y="24" width="28" height="35" rx="2" fill="#fff"/>
+          <path d="M33 35h16M33 43h16M33 51h10" stroke-width="1.6"/>
+        </g>
+      </svg>
+      <h3>Document-driven</h3>
+      <p class="lede" style="font-size:17px">Each phase produces the formal document the next phase consumes.</p>
+      <div class="tfoot">SRS → SDD → CODE → REPORT</div>
+    </div>
+    <div class="col trait">
+      <div class="tnum">03</div>
+      <svg viewBox="0 0 72 72" style="width:118px;margin-bottom:26px">
+        <circle cx="36" cy="36" r="34" class="s-soft"/>
+        <g class="s-stroke-amber" stroke-width="2.2">
+          <path d="M36 14l18 7v17c0 11-8 18-18 21-10-3-18-10-18-21V21z" fill="#fff"/>
+          <path d="M28 36l6 6 12-13" stroke-width="2.8"/>
+        </g>
+      </svg>
+      <h3>Phase gates</h3>
+      <p class="lede" style="font-size:17px">Quality control, staged funding, and a legal record of who approved what.</p>
+      <div class="tfoot">SIGN-OFF BEFORE SPEND</div>
+    </div>
+  </div>
+  <div class="foot"><span>CORE TRAITS</span><span>04 / 16</span></div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <div class="rail"></div>
+  <div class="eyebrow">§3 &nbsp;ORIGINS</div>
+  <h2>How a critique became a mandate</h2>
+  <div class="body" style="align-items:center">
+    <div class="col" style="justify-content:center">
+      <svg viewBox="0 0 640 190">
+        <defs>
+          <linearGradient id="tl" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="620" y2="0">
+            <stop offset="0%" stop-color="#FDBA74"/>
+            <stop offset="100%" stop-color="#9A3412"/>
+          </linearGradient>
+        </defs>
+        <line x1="20" y1="95" x2="614" y2="95" stroke="url(#tl)" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M608 88l12 7-12 7" class="s-stroke-rust" stroke-width="2.2"/>
+
+        <g>
+          <path d="M74 86V74" class="s-dash"/>
+          <circle cx="74" cy="95" r="7" class="s-amber"/>
+          <circle cx="74" cy="95" r="12" fill="none" stroke="#E8590C" stroke-width="1" opacity=".4"/>
+          <text x="74" y="40" class="s-label" text-anchor="middle" font-size="17" font-weight="700">1956</text>
+          <text x="74" y="55" class="s-label-sm" text-anchor="middle">BENINGTON · SAGE</text>
+          <text x="74" y="66" class="s-label-sm" text-anchor="middle">phased development</text>
+        </g>
+        <g>
+          <path d="M225 106v22" class="s-dash"/>
+          <circle cx="225" cy="95" r="9" class="s-rust"/>
+          <circle cx="225" cy="95" r="15" fill="none" stroke="#9A3412" stroke-width="1" opacity=".4"/>
+          <text x="225" y="146" class="s-label" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--rust)">1970</text>
+          <text x="225" y="161" class="s-label-sm" text-anchor="middle">ROYCE PUBLISHES</text>
+          <text x="225" y="172" class="s-label-sm" text-anchor="middle">and warns against it</text>
+        </g>
+        <g>
+          <path d="M400 86V74" class="s-dash"/>
+          <circle cx="400" cy="95" r="7" class="s-amber"/>
+          <circle cx="400" cy="95" r="12" fill="none" stroke="#E8590C" stroke-width="1" opacity=".4"/>
+          <text x="400" y="40" class="s-label" text-anchor="middle" font-size="17" font-weight="700">1988</text>
+          <text x="400" y="55" class="s-label-sm" text-anchor="middle">DOD-STD-2167A</text>
+          <text x="400" y="66" class="s-label-sm" text-anchor="middle">effectively mandatory</text>
+        </g>
+        <g>
+          <path d="M560 104v22" class="s-dash"/>
+          <circle cx="560" cy="95" r="7" class="s-amber"/>
+          <circle cx="560" cy="95" r="12" fill="none" stroke="#E8590C" stroke-width="1" opacity=".4"/>
+          <text x="560" y="146" class="s-label" text-anchor="middle" font-size="17" font-weight="700">1994</text>
+          <text x="560" y="161" class="s-label-sm" text-anchor="middle">MIL-STD-498</text>
+          <text x="560" y="172" class="s-label-sm" text-anchor="middle">constraint lifted</text>
+        </g>
+      </svg>
+      <p class="lede" style="margin-top:34px;max-width:70ch">Machine time was booked weeks ahead, compilation took hours, and software shipped inside hardware. Thinking hard before writing code was the economically correct choice.</p>
+    </div>
+  </div>
+  <div class="foot"><span>ORIGINS</span><span>05 / 16</span></div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <div class="rail"></div>
+  <div class="eyebrow">§4 &nbsp;PHASES 1–2</div>
+  <h2>A third of the effort before any code exists</h2>
+  <div class="body" style="align-items:center">
+    <div class="cards">
+      <div class="card">
+        <h3>Requirements analysis</h3>
+        <p class="lede" style="font-size:17px;margin-bottom:12px">What the system must do — not yet how.</p>
+        <svg viewBox="0 0 380 100" style="margin:2px 0 12px">
+          <g class="s-stroke-amber" stroke-width="1.6">
+            <path d="M10 12h146l-47 34v34l-28 14V46z" fill="#FFF7F1"/>
+          </g>
+          <g class="s-label-sm">
+            <text x="180" y="30">STAKEHOLDER INPUT</text>
+            <text x="180" y="56">FUNCTIONAL / NON-FUNCTIONAL</text>
+            <text x="180" y="82" style="fill:var(--amber)">SIGNED-OFF SRS</text>
+          </g>
+          <g class="s-stroke" stroke-width="1" opacity=".4">
+            <path d="M168 26h6M168 52h6M168 78h6"/>
+          </g>
+        </svg>
+        <ul>
+          <li>Interviews, workshops, observation</li>
+          <li>Functional and non-functional requirements</li>
+          <li>Feasibility across five dimensions</li>
+          <li>Ends in requirements freeze</li>
+        </ul>
+        <div class="pct">10–20%</div>
+      </div>
+      <div class="card">
+        <h3>System design</h3>
+        <p class="lede" style="font-size:17px;margin-bottom:12px">High level architecture, then module detail.</p>
+        <svg viewBox="0 0 380 100" style="margin:2px 0 12px">
+          <g>
+            <rect x="10" y="10" width="150" height="30" rx="2" fill="#EF7C2B"/>
+            <text x="22" y="30" class="s-label-w">HLD · ARCHITECTURE</text>
+            <rect x="10" y="60" width="150" height="30" rx="2" fill="#9A3412"/>
+            <text x="22" y="80" class="s-label-w">LLD · MODULES</text>
+            <path d="M85 40v20" class="s-stroke" stroke-width="1.3"/>
+          </g>
+          <g class="s-label-sm">
+            <text x="180" y="30">components · interfaces</text>
+            <text x="180" y="56">classes · schema · APIs</text>
+            <text x="180" y="82" style="fill:var(--amber)">PDR &amp; CDR REVIEWS</text>
+          </g>
+        </svg>
+        <ul>
+          <li>HLD: components, interfaces, technology</li>
+          <li>LLD: classes, schema, algorithms, APIs</li>
+          <li>High cohesion, low coupling</li>
+          <li>Reviewed at PDR and CDR</li>
+        </ul>
+        <div class="pct">15–25%</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>PHASES 1–2</span><span>06 / 16</span></div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <div class="rail"></div>
+  <div class="eyebrow">§5 &nbsp;PHASES 3–4</div>
+  <h2>Everything converges at integration</h2>
+  <div class="body" style="align-items:center">
+    <div class="cards">
+      <div class="card">
+        <h3>Implementation</h3>
+        <p class="lede" style="font-size:17px;margin-bottom:12px">Modules built in parallel against fixed interfaces.</p>
+        <svg viewBox="0 0 380 110" style="margin:2px 0 12px">
+          <g>
+            <rect x="10" y="6" width="100" height="26" rx="2" fill="#F59E5B"/>
+            <text x="22" y="24" class="s-label-w">MODULE A</text>
+            <rect x="10" y="42" width="100" height="26" rx="2" fill="#EF7C2B"/>
+            <text x="22" y="60" class="s-label-w">MODULE B</text>
+            <rect x="10" y="78" width="100" height="26" rx="2" fill="#E8590C"/>
+            <text x="22" y="96" class="s-label-w">MODULE C</text>
+          </g>
+          <g class="s-stroke" stroke-width="1.3">
+            <path d="M110 19h40v37h50M110 55h90M110 91h40V57h50"/>
+          </g>
+          <rect x="200" y="41" width="112" height="30" rx="2" class="s-stroke-amber" fill="#FFF7F1"/>
+          <text x="214" y="61" class="s-label" style="fill:var(--rust)">BUILD</text>
+          <text x="320" y="61" class="s-label-sm">unit tested</text>
+        </svg>
+        <ul>
+          <li>Code to the design specification</li>
+          <li>Unit tests and peer review</li>
+          <li>Teams work independently</li>
+        </ul>
+        <div class="pct">30–40%</div>
+      </div>
+      <div class="card alt">
+        <h3>Integration &amp; testing</h3>
+        <p class="lede" style="font-size:17px;margin-bottom:12px">Defects escape upward, one level at a time.</p>
+        <svg viewBox="0 0 380 110" style="margin:2px 0 12px">
+          <g>
+            <rect x="10"  y="80" width="86"  height="24" rx="2" fill="#F59E5B"/>
+            <text x="20" y="97" class="s-label-w">UNIT</text>
+            <rect x="80"  y="54" width="120" height="24" rx="2" fill="#EF7C2B"/>
+            <text x="90" y="71" class="s-label-w">INTEGRATION</text>
+            <rect x="180" y="28" width="96"  height="24" rx="2" fill="#D24C09"/>
+            <text x="190" y="45" class="s-label-w">SYSTEM</text>
+            <rect x="262" y="2"  width="76"  height="24" rx="2" fill="#9A3412"/>
+            <text x="272" y="19" class="s-label-w">UAT</text>
+          </g>
+          <g class="s-stroke" stroke-width="1.3">
+            <path d="M96 92h8v-14M200 66h8v-14M276 40h8v-14"/>
+          </g>
+          <path d="M338 14h16" class="s-stroke-rust" stroke-width="2"/>
+          <circle cx="360" cy="14" r="5" class="s-rust"/>
+        </svg>
+        <p class="lede" style="font-size:17px;color:var(--rust)"><strong style="color:var(--rust)">Integration hell:</strong> every wrong assumption surfaces at once, when the budget is nearly gone.</p>
+        <div class="pct">20–30%</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>PHASES 3–4</span><span>07 / 16</span></div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <div class="rail"></div>
+  <div class="eyebrow">§6 &nbsp;PHASES 5–6</div>
+  <h2>The phase nobody presents on</h2>
+  <div class="body" style="align-items:center">
+    <div class="col" style="flex:1.15">
+      <div class="figure">60–80%</div>
+      <p class="figure-note">of total software lifecycle cost falls in maintenance, not development.</p>
+      <svg viewBox="0 0 340 62" style="margin-top:28px;width:88%">
+        <rect x="0" y="10" width="102" height="26" rx="2" fill="#F59E5B"/>
+        <rect x="102" y="10" width="238" height="26" rx="2" fill="#9A3412"/>
+        <text x="10" y="27" class="s-label-w">BUILD</text>
+        <text x="112" y="27" class="s-label-w">MAINTENANCE</text>
+        <g class="s-label-sm">
+          <text x="0" y="52">0%</text>
+          <text x="88" y="52">30%</text>
+          <text x="320" y="52">100%</text>
+        </g>
+        <path d="M102 6V0" class="s-dash"/>
+      </svg>
+      <p class="lede" style="font-size:17px;margin-top:22px;max-width:38ch">Estimates range from 50% to 80% depending on method and system type. All of them agree maintenance outweighs the build.</p>
+    </div>
+    <div class="col tight" style="justify-content:center">
+      <h3 style="margin-bottom:14px">Deployment strategies</h3>
+      <ul style="margin-bottom:28px">
+        <li>Big Bang · Phased · Parallel · Pilot</li>
+        <li>Data migration is the usual failure point</li>
+      </ul>
+      <h3 style="margin-bottom:14px">Maintenance types</h3>
+      <ul>
+        <li>Perfective — enhancements, ~50%</li>
+        <li>Adaptive — environment shifts, ~25%</li>
+        <li>Corrective — defect fixes</li>
+        <li>Preventive — refactoring, cut first</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>PHASES 5–6</span><span>08 / 16</span></div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <div class="rail"></div>
+  <div class="eyebrow">§7 &nbsp;KEY VARIANT</div>
+  <h2>The V-Model pairs every phase with its test</h2>
+  <div class="body" style="align-items:center">
+    <div class="col" style="flex:1.75;justify-content:center">
+      <svg viewBox="-6 -6 552 236">
+        <!-- pairing dashes -->
+        <g class="s-dash">
+          <path d="M108 20h324"/>
+          <path d="M142 66h256"/>
+          <path d="M176 112h188"/>
+          <path d="M210 158h120"/>
+        </g>
+        <text x="270" y="14" class="s-label-sm" text-anchor="middle">validates</text>
+
+        <!-- left arm: definition -->
+        <g>
+          <rect x="0"   y="6"   width="108" height="28" rx="3" fill="#F59E5B"/>
+          <text x="9" y="24" class="s-label-w">BUSINESS REQS</text>
+          <rect x="34"  y="52"  width="108" height="28" rx="3" fill="#EF7C2B"/>
+          <text x="43" y="70" class="s-label-w">SYSTEM SPEC</text>
+          <rect x="68"  y="98"  width="108" height="28" rx="3" fill="#E8590C"/>
+          <text x="77" y="116" class="s-label-w">ARCHITECTURE</text>
+          <rect x="102" y="144" width="108" height="28" rx="3" fill="#D24C09"/>
+          <text x="111" y="162" class="s-label-w">MODULE DESIGN</text>
+        </g>
+        <!-- base -->
+        <rect x="216" y="196" width="108" height="28" rx="3" class="s-ink"/>
+        <text x="228" y="214" class="s-label-w">IMPLEMENTATION</text>
+        <!-- right arm: verification -->
+        <g>
+          <rect x="432" y="6"   width="108" height="28" rx="3" fill="#6B2410"/>
+          <text x="441" y="24" class="s-label-w">ACCEPTANCE</text>
+          <rect x="398" y="52"  width="108" height="28" rx="3" fill="#7C2D12"/>
+          <text x="407" y="70" class="s-label-w">SYSTEM TEST</text>
+          <rect x="364" y="98"  width="108" height="28" rx="3" fill="#8C3313"/>
+          <text x="373" y="116" class="s-label-w">INTEGRATION</text>
+          <rect x="330" y="144" width="108" height="28" rx="3" fill="#9A3412"/>
+          <text x="339" y="162" class="s-label-w">UNIT TEST</text>
+        </g>
+        <!-- flow -->
+        <g class="s-stroke" stroke-width="1.3">
+          <path d="M54 34v18M88 80v18M122 126v18"/>
+          <path d="M156 172v12h84v12"/>
+          <path d="M300 196v-12h84v-12"/>
+          <path d="M418 144v-18M452 98v-18M486 52v-18"/>
+        </g>
+        <g class="s-label-sm">
+          <text x="0" y="200">DEFINITION</text>
+          <text x="470" y="200" text-anchor="end">VERIFICATION</text>
+        </g>
+      </svg>
+    </div>
+    <div class="col">
+      <p class="lede">Writing a requirement forces you to define how it will be verified. If you cannot describe the test, the requirement is not written clearly enough.</p>
+      <ul style="margin-top:22px">
+        <li>Test planning starts at requirements</li>
+        <li>Ambiguity surfaces months earlier</li>
+        <li>Standard in medical, automotive, aviation</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>V-MODEL</span><span>09 / 16</span></div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <div class="rail"></div>
+  <div class="eyebrow">§8 &nbsp;OTHER VARIANTS</div>
+  <h2>Three ways the model bends in practice</h2>
+  <div class="body" style="align-items:flex-start;padding-top:52px">
+    <div class="col tight">
+      <svg viewBox="0 0 170 120" style="margin-bottom:22px;width:86%">
+        <g>
+          <rect x="6"  y="8"  width="72" height="20" rx="2" fill="#F59E5B"/>
+          <text x="14" y="22" class="s-label-w">DESIGN</text>
+          <rect x="34" y="44" width="72" height="20" rx="2" fill="#E8590C"/>
+          <text x="42" y="58" class="s-label-w">BUILD</text>
+          <rect x="62" y="80" width="72" height="20" rx="2" fill="#9A3412"/>
+          <text x="70" y="94" class="s-label-w">TEST</text>
+        </g>
+        <g class="s-stroke" stroke-width="1.2">
+          <path d="M52 28v16M80 64v16"/>
+        </g>
+        <g class="s-stroke-rust" stroke-width="1.8">
+          <path d="M106 54c26 0 26-26 0-26"/>
+          <path d="M110 24l-5 4 5 4"/>
+          <path d="M134 90c26 0 26-26 0-26"/>
+          <path d="M138 60l-5 4 5 4"/>
+        </g>
+        <text x="150" y="42" class="s-label-sm" style="fill:var(--rust)">rework</text>
+      </svg>
+      <h3>With feedback</h3>
+      <p class="lede" style="font-size:17px">Return one step back when a problem appears. What Royce actually proposed, and what most teams really do.</p>
+      <div class="tfoot">ROYCE'S ACTUAL PROPOSAL</div>
+    </div>
+    <div class="col tight">
+      <svg viewBox="0 0 170 120" style="margin-bottom:22px;width:86%">
+        <g fill="#E8590C" opacity=".14">
+          <rect x="42" y="10" width="48" height="92"/>
+        </g>
+        <g class="s-dash">
+          <path d="M42 8v96M90 8v96"/>
+        </g>
+        <g>
+          <rect x="4"  y="14" width="86" height="20" rx="2" fill="#F59E5B"/>
+          <text x="12" y="28" class="s-label-w">REQUIREMENTS</text>
+          <rect x="42" y="46" width="86" height="20" rx="2" fill="#E8590C"/>
+          <text x="50" y="60" class="s-label-w">DESIGN</text>
+          <rect x="76" y="78" width="86" height="20" rx="2" fill="#9A3412"/>
+          <text x="84" y="92" class="s-label-w">BUILD</text>
+        </g>
+        <text x="44" y="114" class="s-label-sm" style="fill:var(--amber)">overlap</text>
+      </svg>
+      <h3>Sashimi</h3>
+      <p class="lede" style="font-size:17px">Phases overlap partially. Shortens the schedule and cuts idle time, at the cost of clean boundaries.</p>
+      <div class="tfoot">SCHEDULE COMPRESSION</div>
+    </div>
+    <div class="col tight">
+      <svg viewBox="0 0 170 120" style="margin-bottom:22px;width:86%">
+        <g>
+          <rect x="4"  y="30" width="16" height="56" rx="2" fill="#F59E5B"/>
+          <rect x="24" y="38" width="16" height="40" rx="2" fill="#E8590C"/>
+          <rect x="44" y="46" width="16" height="24" rx="2" fill="#9A3412"/>
+          <text x="4" y="100" class="s-label-sm">RELEASE 1</text>
+          <rect x="86"  y="30" width="16" height="56" rx="2" fill="#F59E5B"/>
+          <rect x="106" y="38" width="16" height="40" rx="2" fill="#E8590C"/>
+          <rect x="126" y="46" width="16" height="24" rx="2" fill="#9A3412"/>
+          <text x="86" y="100" class="s-label-sm">RELEASE 2</text>
+        </g>
+        <g class="s-stroke-rust" stroke-width="1.8">
+          <path d="M62 58h18l-5-4M80 58l-5 4"/>
+          <path d="M144 58h18l-5-4M162 58l-5 4"/>
+        </g>
+        <text x="4" y="18" class="s-label-sm" style="fill:var(--amber)">SMALL FULL CYCLES</text>
+      </svg>
+      <h3>Incremental</h3>
+      <p class="lede" style="font-size:17px">Several small waterfall cycles that accumulate. The clearest bridge toward Agile.</p>
+      <div class="tfoot">THE STEP TOWARD AGILE</div>
+    </div>
+  </div>
+  <div class="foot"><span>VARIANTS</span><span>10 / 16</span></div>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <div class="rail"></div>
+  <div class="eyebrow">§9 &nbsp;ADVANTAGES</div>
+  <h2>What the model buys you</h2>
+  <div class="body" style="align-items:center">
+    <div class="col" style="flex:1.25">
+      <ul>
+        <li><strong>Estimable.</strong> Fixed scope makes Gantt charts, critical paths, and budget commitments possible</li>
+        <li><strong>Auditable.</strong> Traceability from requirement to test is mandatory evidence in regulated industries</li>
+        <li><strong>Durable knowledge.</strong> When people leave, the documentation stays</li>
+        <li><strong>Low customer load.</strong> Stakeholders appear at gates, not daily standups</li>
+        <li><strong>Specialist efficiency.</strong> Staff move between projects as phases shift</li>
+      </ul>
+    </div>
+    <div class="col" style="flex:.85;justify-content:center">
+      <svg viewBox="0 0 300 210">
+        <g class="s-label-sm">
+          <text x="0" y="14">PROJECT PLAN · Q1 → Q4</text>
+        </g>
+        <g class="s-dash">
+          <path d="M78 22v168M138 22v168M198 22v168M258 22v168"/>
+        </g>
+        <g class="s-label-sm">
+          <text x="78" y="204">Q1</text>
+          <text x="138" y="204">Q2</text>
+          <text x="198" y="204">Q3</text>
+          <text x="258" y="204">Q4</text>
+        </g>
+        <g>
+          <text x="0" y="38" class="s-label-sm">REQUIREMENTS</text>
+          <rect x="78" y="30" width="52" height="14" rx="2" fill="#F59E5B"/>
+          <text x="0" y="66" class="s-label-sm">DESIGN</text>
+          <rect x="122" y="58" width="60" height="14" rx="2" fill="#EF7C2B"/>
+          <text x="0" y="94" class="s-label-sm">BUILD</text>
+          <rect x="172" y="86" width="76" height="14" rx="2" fill="#E8590C"/>
+          <text x="0" y="122" class="s-label-sm">TEST</text>
+          <rect x="230" y="114" width="48" height="14" rx="2" fill="#B03F08"/>
+          <text x="0" y="150" class="s-label-sm">DEPLOY</text>
+          <rect x="268" y="142" width="24" height="14" rx="2" fill="#9A3412"/>
+        </g>
+        <g class="s-stroke" stroke-width="1" opacity=".5">
+          <path d="M130 37h-4M182 65h-4M248 93h-4M278 121h-4"/>
+        </g>
+        <g class="s-stroke-rust" stroke-width="1.4">
+          <path d="M104 44v14h18M152 72v14h20M210 100v14h20M254 128v14h14"/>
+        </g>
+        <g>
+          <path d="M130 174l7-7 7 7-7 7z" class="s-amber"/>
+          <path d="M248 174l7-7 7 7-7 7z" class="s-rust"/>
+          <text x="0" y="178" class="s-label-sm">MILESTONES</text>
+          <path d="M78 174h48M144 174h100" class="s-dash"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="foot"><span>ADVANTAGES</span><span>11 / 16</span></div>
+</section>
+
+<!-- 12 -->
+<section class="slide accent">
+  <div class="rail"></div>
+  <div class="eyebrow">§10 &nbsp;DISADVANTAGES</div>
+  <h2>What it costs you</h2>
+  <div class="body" style="align-items:flex-start">
+    <div class="col tight">
+      <ul>
+        <li class="warn"><strong>Rigid.</strong> Every change after the freeze needs formal approval and repricing</li>
+        <li class="warn"><strong>Late visibility.</strong> On an 18-month project, nothing runs for 15 of them</li>
+        <li class="warn"><strong>Back-loaded risk.</strong> Wrong assumptions surface when the money is spent</li>
+        <li class="warn"><strong>False premise.</strong> Users understand their needs after using something, not before</li>
+      </ul>
+    </div>
+    <div class="col tight">
+      <ul>
+        <li class="warn"><strong>Documentation theatre.</strong> Mandated documents get written to satisfy the process, then go stale</li>
+        <li class="warn"><strong>Idle capacity.</strong> Testers wait months; analysts idle at the end</li>
+        <li class="warn"><strong>Silent gaps.</strong> A requirement nobody raised stays invisible until UAT</li>
+      </ul>
+      <svg viewBox="0 0 330 150" style="margin-top:14px;width:94%">
+        <text x="0" y="10" class="s-label-sm">COST OF FIXING ONE DEFECT</text>
+        <g class="s-stroke" stroke-width="1.3">
+          <path d="M28 126h296M28 126V20"/>
+        </g>
+        <path d="M28 122C110 120 180 106 240 74c34-18 56-38 70-52" class="s-stroke-rust" stroke-width="2.4"/>
+        <g fill="#9A3412">
+          <circle cx="28" cy="122" r="3.4"/>
+          <circle cx="112" cy="118" r="3.4"/>
+          <circle cx="182" cy="104" r="3.4"/>
+          <circle cx="248" cy="68" r="3.4"/>
+          <circle cx="310" cy="22" r="4.6"/>
+        </g>
+        <g class="s-label-sm">
+          <text x="18" y="140">REQ</text>
+          <text x="98" y="140">DESIGN</text>
+          <text x="170" y="140">CODE</text>
+          <text x="238" y="140">TEST</text>
+          <text x="294" y="140">PROD</text>
+          <text x="256" y="16" style="fill:var(--rust)">×100</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="foot"><span>DISADVANTAGES</span><span>12 / 16</span></div>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <div class="rail"></div>
+  <div class="eyebrow">§11 &nbsp;FIT</div>
+  <h2>Building versus discovering</h2>
+  <div class="body" style="align-items:stretch">
+    <div class="split">
+      <div>
+        <div class="badge yes">✓</div>
+        <h3 style="margin-bottom:18px">Use it when</h3>
+        <ul>
+          <li>Requirements are stable and well understood</li>
+          <li>The technology holds no unknowns</li>
+          <li>Compliance evidence is required</li>
+          <li>The contract is fixed-price, fixed-scope</li>
+          <li>A production defect is expensive or dangerous</li>
+        </ul>
+        <div style="margin-top:auto">
+          <div class="tfoot" style="margin-bottom:20px">BUILDING · THE ANSWER IS KNOWN</div>
+          <svg viewBox="0 0 400 90" style="width:88%">
+            <g>
+              <rect x="0"   y="30" width="80" height="30" rx="3" fill="#F59E5B"/>
+              <text x="12" y="49" class="s-label-w">PLAN</text>
+              <rect x="106" y="30" width="80" height="30" rx="3" fill="#EF7C2B"/>
+              <text x="118" y="49" class="s-label-w">BUILD</text>
+              <rect x="212" y="30" width="80" height="30" rx="3" fill="#E8590C"/>
+              <text x="224" y="49" class="s-label-w">VERIFY</text>
+              <rect x="318" y="30" width="80" height="30" rx="3" fill="#9A3412"/>
+              <text x="330" y="49" class="s-label-w">SHIP</text>
+            </g>
+            <g class="s-stroke-amber" stroke-width="2">
+              <path d="M84 45h16l-5-4M100 45l-5 4"/>
+              <path d="M190 45h16l-5-4M206 45l-5 4"/>
+              <path d="M296 45h16l-5-4M312 45l-5 4"/>
+            </g>
+            <g class="s-label-sm">
+              <text x="88" y="22">gate</text>
+              <text x="194" y="22">gate</text>
+              <text x="300" y="22">gate</text>
+              <text x="0" y="82">ONE PASS · PREDICTABLE COST</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <div class="badge no">✕</div>
+        <h3 style="margin-bottom:18px">Avoid it when</h3>
+        <ul>
+          <li class="warn">Requirements are unclear or certain to move</li>
+          <li class="warn">The product needs continuous user experimentation</li>
+          <li class="warn">The technology is new and unproven</li>
+          <li class="warn">Time to market is the binding constraint</li>
+          <li class="warn">The work is exploratory or research</li>
+        </ul>
+        <div style="margin-top:auto">
+          <div class="tfoot" style="margin-bottom:20px">DISCOVERING · THE ANSWER IS FOUND</div>
+          <svg viewBox="0 0 400 90" style="width:88%">
+            <g class="s-stroke-rust" stroke-width="2.4">
+              <path d="M74 45a56 56 0 1 1 16 39"/>
+              <path d="M84 76l6 9 10-5"/>
+            </g>
+            <g>
+              <rect x="30"  y="0"  width="88" height="26" rx="3" fill="#9A3412"/>
+              <text x="42" y="18" class="s-label-w">BUILD</text>
+              <rect x="30"  y="64" width="88" height="26" rx="3" fill="#B03F08"/>
+              <text x="42" y="82" class="s-label-w">LEARN</text>
+              <rect x="118" y="32" width="88" height="26" rx="3" fill="#E8590C"/>
+              <text x="130" y="50" class="s-label-w">MEASURE</text>
+            </g>
+            <g class="s-label-sm">
+              <text x="226" y="30">short loops · cheap to be wrong</text>
+              <text x="226" y="50" style="fill:var(--rust)">requirements emerge from use</text>
+              <text x="226" y="70">MANY PASSES · SCOPE FLEXES</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>FIT</span><span>13 / 16</span></div>
+</section>
+
+<!-- 14 -->
+<section class="slide">
+  <div class="rail"></div>
+  <div class="eyebrow">§12 &nbsp;COMPARISON</div>
+  <h2>Waterfall and Agile answer different questions</h2>
+  <div class="body" style="align-items:center">
+    <div class="col" style="justify-content:center">
+      <table>
+        <thead><tr><th style="width:22%">CRITERION</th><th style="width:39%">WATERFALL</th><th style="width:39%">AGILE</th></tr></thead>
+        <tbody>
+          <tr><td>REQUIREMENTS</td><td>Locked at the outset</td><td>Continuously evolving</td></tr>
+          <tr><td>DELIVERY</td><td>Once, at the end</td><td>Every sprint</td></tr>
+          <tr><td>DOCUMENTATION</td><td>Central and mandatory</td><td>Sufficient only</td></tr>
+          <tr><td>CUSTOMER</td><td>Present at phase gates</td><td>Present continuously</td></tr>
+          <tr><td>TESTING</td><td>After implementation</td><td>Alongside development</td></tr>
+          <tr><td>RISK</td><td>Surfaces late, all at once</td><td>Surfaces early, in pieces</td></tr>
+          <tr><td>WHAT IS FIXED</td><td>Scope; time and cost flex</td><td>Time and cost; scope flexes</td></tr>
+        </tbody>
+      </table>
+      <p class="tnote">Not right and wrong — two tools for two classes of problem. Most organisations now run a hybrid: Waterfall governance around Agile execution.</p>
+    </div>
+  </div>
+  <div class="foot"><span>COMPARISON</span><span>14 / 16</span></div>
+</section>
+
+<!-- 15 -->
+<section class="slide">
+  <div class="rail"></div>
+  <div class="eyebrow">§13 &nbsp;EVIDENCE</div>
+  <h2>Same method, opposite outcomes</h2>
+  <div class="body" style="align-items:center">
+    <div class="cards">
+      <div class="card">
+        <h3 style="color:var(--amber)">Blood glucose meter firmware</h3>
+        <svg viewBox="0 0 380 44" style="margin:8px 0 14px">
+          <rect x="0" y="12" width="380" height="24" rx="2" fill="#E8590C"/>
+          <text x="12" y="28" class="s-label-w">PLANNED 14 MONTHS · DELIVERED 14 MONTHS</text>
+        </svg>
+        <ul>
+          <li>Requirements fixed by medical standards</li>
+          <li>Certification demands full traceability</li>
+          <li>Embedded software, no remote updates</li>
+        </ul>
+        <p class="lede" style="font-size:17px;margin-top:14px"><strong>On schedule, certified first attempt.</strong></p>
+      </div>
+      <div class="card alt">
+        <h3 style="color:var(--rust)">Retail e-commerce platform, 20 months</h3>
+        <svg viewBox="0 0 380 44" style="margin:8px 0 14px">
+          <rect x="0" y="12" width="266" height="24" rx="2" fill="#9A3412"/>
+          <rect x="266" y="12" width="114" height="24" rx="2" fill="#FFEEE0" stroke="#9A3412" stroke-dasharray="4 3"/>
+          <text x="12" y="28" class="s-label-w">PLANNED 20 MONTHS</text>
+          <text x="284" y="29" class="s-label" style="fill:var(--rust)">+7 MO LATE</text>
+        </svg>
+        <ul>
+          <li class="warn">Month 12 — market shifts, change rejected</li>
+          <li class="warn">Month 17 — architecture fails load testing</li>
+          <li class="warn">Month 19 — UAT rejects the payment flow</li>
+        </ul>
+        <p class="lede" style="font-size:17px;margin-top:14px"><strong>Seven months late, 40% over budget.</strong></p>
+      </div>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:26px;max-width:78ch">The deciding difference was not scale or budget. It was uncertainty. All three failures in the second case were detectable in month one with a working prototype.</p>
+  <div class="foot"><span>EVIDENCE</span><span>15 / 16</span></div>
+</section>
+
+<!-- 16 -->
+<section class="slide accent">
+  <div class="rail"></div>
+  <div class="eyebrow">§14 &nbsp;CONCLUSION</div>
+  <h2 style="max-width:24ch">Uncertainty decides the model, not fashion</h2>
+  <div class="body" style="align-items:center">
+    <div class="col" style="justify-content:center">
+      <svg viewBox="0 0 620 120" style="width:82%">
+        <defs>
+          <linearGradient id="ax" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="600" y2="0">
+            <stop offset="0%" stop-color="#9A3412"/>
+            <stop offset="50%" stop-color="#E8590C"/>
+            <stop offset="100%" stop-color="#FDBA74"/>
+          </linearGradient>
+        </defs>
+        <rect x="230" y="52" width="160" height="46" rx="4" fill="#E8590C" opacity=".08"/>
+        <line x1="20" y1="62" x2="600" y2="62" stroke="url(#ax)" stroke-width="6" stroke-linecap="round"/>
+        <g>
+          <circle cx="20" cy="62" r="10" fill="#9A3412"/>
+          <circle cx="310" cy="62" r="10" fill="#E8590C"/>
+          <circle cx="600" cy="62" r="10" fill="#FDBA74" stroke="#E8590C" stroke-width="1.5"/>
+        </g>
+        <g class="s-label" font-size="13" font-weight="700">
+          <text x="20" y="40">WATERFALL</text>
+          <text x="310" y="40" text-anchor="middle">HYBRID</text>
+          <text x="600" y="40" text-anchor="end">AGILE</text>
+        </g>
+        <g class="s-label-sm" font-size="10">
+          <text x="20" y="92">LOW UNCERTAINTY</text>
+          <text x="310" y="92" text-anchor="middle">MOST REAL PROJECTS</text>
+          <text x="600" y="92" text-anchor="end">HIGH UNCERTAINTY</text>
+        </g>
+      </svg>
+      <p class="lede" style="margin-top:38px;max-width:68ch">Where uncertainty is low, planning holds its value. Where it is high, a plan decays faster than it can be executed. A good engineer diagnoses the context before choosing the method.</p>
+      <div style="margin-top:44px;font-family:var(--mono);font-size:16px;letter-spacing:.16em;color:var(--amber);font-weight:500">THANK YOU · QUESTIONS</div>
+    </div>
+  </div>
+  <div class="foot"><span>CONCLUSION</span><span>16 / 16</span></div>
+</section>
+
+</div>
+</div>
+
+<div id="notes" aria-live="polite"></div>
+
+<div id="ui">
+  <button id="prev" aria-label="Previous slide">←</button>
+  <span id="count">1 / 16</span>
+  <button id="next" aria-label="Next slide">→</button>
+  <button id="noteBtn" aria-label="Toggle speaker notes">N</button>
+</div>
+
+<script>
+const BASE_W = 1600, BASE_H = 900;
+const stage = document.getElementById('stage');
+
+function fit(){
+  const s = Math.min(window.innerWidth / BASE_W, window.innerHeight / BASE_H);
+  stage.style.transform = 'scale(' + s + ')';
+}
+fit();
+window.addEventListener('resize', fit);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+
+const slides = Array.from(document.querySelectorAll('.slide'));
+const notesText = [
+  "Pause before you start. Let the room settle, then open.",
+  "Deliver this slowly. Royce drew the sequential diagram, then wrote that it was risky and invited failure. The industry took the diagram and discarded the critique. He never used the word waterfall either — that came from Bell and Thayer in 1976.",
+  "Walk the cascade top to bottom as you name the six phases. Point at the deliverable labels: the document, not conversation, is what carries knowledge forward.",
+  "Phase gates deserve the most time here. They are not paperwork: they are quality control, staged funding, and a legal record all at once. That is why the model survives in regulated industries.",
+  "Do not just read dates. The point of this slide is that a defence procurement standard, not technical merit, is what made Waterfall dominant. Then explain the context: machine time, compile times, no way to ship a patch.",
+  "The number to land is the combined effort share. A third of the project spent before any code exists. That is the whole philosophy in one figure.",
+  "Slow down at integration hell. Explain why: testing at the end is the first moment timing, storage, and throughput are experienced rather than analysed. Royce identified this exact problem in 1970.",
+  "Let the 60 to 80 percent figure sit for two seconds before you explain it. Use the bar to show how small the build slice really is. Then make the connection: this is why Waterfall obsesses over documentation. Systems outlive their teams.",
+  "Trace the V with your hand as you talk. The insight is the dashed lines: writing a requirement forces you to define its test. If you cannot describe the test, the requirement is not clear enough.",
+  "Move quickly here. The key line is that feedback-enabled Waterfall is what Royce originally proposed, and it is what almost every real team actually does.",
+  "Do not apologise for these. Fixed-price contracts and regulatory certification are real constraints, and Waterfall answers them better than Agile does. The Gantt chart is the visual proof of the first bullet.",
+  "The tint signals the turn. Point at the cost curve: a defect found in production costs roughly a hundred times what it costs at requirements. Then land the last point hardest — users understand their needs after using something, not before.",
+  "Close this slide with the compact formulation: Waterfall suits building, not discovering.",
+  "Do not read the table. Pick three rows — attitude to change, when risk surfaces, and what is fixed — and talk through those. Then make the point about hybrids.",
+  "Contrast the two timeline bars explicitly. Same method, opposite results, because the uncertainty level differed. That sets up the conclusion.",
+  "Point at the axis. Most real projects live in the middle, which is why hybrids exist. End on the line about diagnosing context, then stop talking and invite questions."
+];
+
+let i = 0;
+const railFor = s => s.querySelector('.rail');
+
+function buildRails(){
+  slides.forEach(s=>{
+    const r = railFor(s);
+    r.innerHTML = '';
+    for(let k=0;k<slides.length;k++) r.appendChild(document.createElement('i'));
+  });
+}
+function paintRail(){
+  const r = railFor(slides[i]);
+  Array.from(r.children).forEach((seg,k)=> seg.classList.toggle('fill', k<=i));
+}
+function show(n){
+  i = Math.max(0, Math.min(slides.length-1, n));
+  slides.forEach((s,k)=> s.classList.toggle('on', k===i));
+  document.getElementById('count').textContent = (i+1)+' / '+slides.length;
+  document.getElementById('notes').innerHTML = '<b>SPEAKER NOTES · SLIDE '+(i+1)+'</b>'+notesText[i];
+  paintRail();
+  history.replaceState(null, '', '#' + (i+1));
+}
+buildRails();
+show((parseInt(location.hash.slice(1), 10) || 1) - 1);
+
+document.getElementById('next').onclick = ()=>show(i+1);
+document.getElementById('prev').onclick = ()=>show(i-1);
+document.getElementById('noteBtn').onclick = ()=>document.getElementById('notes').classList.toggle('show');
+
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();show(i+1)}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1)}
+  if(e.key==='Home'){show(0)}
+  if(e.key==='End'){show(slides.length-1)}
+  if(e.key==='n'||e.key==='N'){document.getElementById('notes').classList.toggle('show')}
+  if(e.key==='f'||e.key==='F'){
+    if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+});
+</script>
+</body>
+</html>
